@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        *{
+            padding: 0;
+            margin: 0;
+        }
+       .main {
+           width: 500px;
+           height: 500px;
+           margin: 50px auto;
+           border: 1px solid #cecece;
+       }
+        .view_dialog{
+            width: 100%;
+            height: 400px;
+            border-bottom:1px solid #cecece ;
+            overflow: auto;
+        }
+        .post_info{
+            position: relative;
+        }
+
+        #txt {
+            width: 100%;
+            border: 0 none;
+            outline: none;
+            resize : none;
+            height: 99px;
+            overflow-y: hidden;
+            font-size: 20px;
+        }
+        button {
+            border: none;
+            outline: none;
+            padding: 2px 5px;
+            margin: 0;
+            position: absolute;
+            right: 0;
+            bottom: 3px;
+            cursor: pointer;
+        }
+        .self {
+            max-width: 90%;
+            margin-left: 10%;
+            overflow: hidden;
+            clear: both;
+            margin-bottom: 5px;
+        }
+        .self .left {
+            float: right;
+            max-width: 91%;
+        }
+        .self .right {
+            float: right;
+            width: 9%;
+            height: 40px;
+            background-color: #eee;
+
+        }
+        .other {
+            max-width: 90%;
+            margin-right: 10%;
+            overflow: hidden;
+            clear: both;
+            margin-bottom: 5px;
+        }
+        .other .right {
+            float: left;
+            max-width: 91%;
+
+        }
+        .other .left {
+            float: left;
+            width: 9%;
+            height: 40px;
+            background-color: #666;
+        }
+    </style>
+</head>
+<body>
+<div class="main">
+    <div class="view_dialog">
+
+    </div>
+    <div class="post_info">
+        <textarea name=""  id="txt" disabled></textarea>
+        <button>发送</button>
+    </div>
+</div>
+
+<script type="text/javascript" src="/static/socket.io-client/dist/socket.io.js"></script>
+<script type="text/javascript" src="/static/jquery/dist/jquery.js"></script>
+<script>
+    var socket = io.connect('http://localhost:8001/cl');
+    socket.on('isOnline', function (data) {
+        if(data){
+            $("#txt").attr("disabled",false);
+        }else {
+
+        }
+    });
+    var id;
+    socket.on('new_msg', function (data) {
+        $("#txt").attr("disabled",false);
+        id = data.id;
+        var str = "<div class='other'>" +
+                "<div class='left'></div>"+
+                "<div class='right'>"+data.msg+"</div>"+
+                "</div>";
+        $(str).appendTo(".view_dialog");
+
+    });
+
+    $("button").on("click",function(){
+        var msg = $("#txt").val();
+        socket.emit('new_cl', { msg: msg,id:id});
+        var str = "<div class='self'>" +
+                "<div class='right'></div>"+
+                "<div class='left'>"+msg+"</div>"+
+                "</div>";
+        $(str).appendTo(".view_dialog");
+        $("#txt").val("");
+    });
+
+</script>
+<script>
+
+</script>
+</body>
+</html>
