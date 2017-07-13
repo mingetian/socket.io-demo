@@ -2,4 +2,4 @@
 
 ## node server.js
 
-## ·ÃÎÊlocalhost:8001/client.htmlºÍlocalhost:8001/
+## è®¿é—®localhost:8001/client.htmlï¿½ï¿½localhost:8001/
